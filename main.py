@@ -1,5 +1,13 @@
-def main():
-    print("Hello World")
+from fastapi import FastAPI
 
-if __name__ == "__main__":
-    main()
+app = FastAPI()
+
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+
+@app.get("/items/{item_id}")
+async def read_item(item_id:int):
+    return {"item_id": item_id}
