@@ -1,6 +1,7 @@
 from enum import Enum
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
+from typing import Annotated
 from pydantic import BaseModel
 
 class ModelName(str, Enum):
@@ -29,9 +30,16 @@ async def read_item_query(skip:int =0, limit: int = 10):
     return fake_items_db[skip + limit]
 
 
-@app.get("/items/{item_id}")
+""" @app.get("/items/{item_id}")
 async def read_item(item_id:int):
-    return {"item_id": item_id}
+    return {"item_id": item_id} """
+
+
+# http://localhost:8000/items/?q=foo&q=bar
+@app.get("/items/")
+async def read_items(q: Annotated[list[str] | None, Query()] = None):
+    query_items = {"q": q}
+    return query_items
 
 
 @app.get("/get_model/{model_name}")
